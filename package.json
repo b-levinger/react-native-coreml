@@ -4,6 +4,8 @@
   "peerDependencies": {
     "react-native-swift": "^1.2.0"
   },
+  "homepage": "https://github.com/b-levinger/react-native-coreml",
+  "Summary": "forked version of react-native-coreml that works with react 0.6+",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "bridge": "react-native-swift-bridge",
