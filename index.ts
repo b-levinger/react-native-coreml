@@ -1,5 +1,6 @@
 import { NativeModules, Image } from "react-native";
 const { resolveAssetSource } = Image;
+
 class RNCoreMLClass {
   compileModel: (sourcepath: string) => Promise<string>;
   classifyImageWithModel: (
@@ -14,9 +15,10 @@ class RNCoreMLClass {
   mainBundleURL: string;
   mainBundlePath: string;
 }
+
 const RNCoreML: RNCoreMLClass = NativeModules.RNCoreML;
 const { mainBundlePath, mainBundleURL } = RNCoreML;
-const fixURL = sourcepath => {
+const fixURL = (sourcepath:{uri:string} | string) => {
   if (typeof sourcepath === "string") {
     if (sourcepath.includes("/")) return sourcepath;
     else return mainBundleURL + "/" + sourcepath;
@@ -27,39 +29,39 @@ const fixURL = sourcepath => {
   const { uri } = resolveAssetSource(sourcepath);
   return uri;
 };
-const compileModel = async sourcepath => {
+const compileModel = async (sourcepath:{uri:string} | string) => {
   return await RNCoreML.compileModel(fixURL(sourcepath));
 };
-const classifyImage = async (imagePath, modelPath) => {
+const classifyImage = async (imagePath:string, modelPath:string):Promise<Array<any>> => {
   return await RNCoreML.classifyImageWithModel(
     fixURL(imagePath),
     fixURL(modelPath)
   );
 };
-const getTopResult = arr => {
+const getTopResult = (arr:Array<any>) => {
   return arr[0];
 };
-const getTopFiveResults = arr => {
+const getTopFiveResults = (arr:Array<any>) => {
   return arr.slice(0, 4);
 };
-const classifyTopFive = async (imagePath, modelPath) => {
-  const arr = classifyImage(imagePath, modelPath);
+const classifyTopFive = async (imagePath:string, modelPath:string) => {
+  const arr = await classifyImage(imagePath, modelPath);
   return getTopFiveResults(arr);
 };
-const classifyTopValue = async (imagePath, modelPath) => {
-  const arr = classifyImage(imagePath, modelPath);
+const classifyTopValue = async (imagePath:string, modelPath:string) => {
+  const arr = await classifyImage(imagePath, modelPath);
   return getTopResult(arr);
 };
-const predict = async (dictionary, modelPath) => {
+const predict = async (dictionary:Record<string, any>, modelPath:string) => {
   const obj = await RNCoreML.predictFromDataWithModel(
     dictionary,
     fixURL(modelPath)
   );
   return obj;
 };
-const saveMultiArray = async (key, savePath) => {
+const saveMultiArray = async (key:string, savePath:string|null) => {
   if (!savePath) savePath = null;
-  const newPath = await RNCoreML.saveMultiArray(key, savePath);
+  const newPath = await RNCoreML.saveMultiArray(key, savePath || "");
   return newPath;
 };
 export default {
