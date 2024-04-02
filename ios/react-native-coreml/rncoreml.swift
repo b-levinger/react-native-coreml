@@ -143,7 +143,7 @@ public class RNCoreML: NSObject {
                             let tempURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString).appendingPathExtension("jpg")
                             let ci = CIImage(cvImageBuffer: cvib)
                             let ui = UIImage(ciImage: ci)
-                            guard let _ = try? UIImageJPEGRepresentation(ui, 1.0)?.write(to: tempURL) else { continue }
+                            guard let _ = try? ui.jpegData(compressionQuality: 1.0)?.write(to: tempURL) else { continue }
                             o = tempURL.absoluteString
                             ts = "image";
                         }
