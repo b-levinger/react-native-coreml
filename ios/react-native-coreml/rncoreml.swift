@@ -61,6 +61,7 @@ public class RNCoreML: NSObject {
         case .double: t = "double";
         case .float32: t = "float32";
         case .int32: t = "int32";
+        case .float16: t = "float16";
         }
         for n in multiArray.shape {
             t = t.appending(".").appending(n.stringValue)
@@ -160,6 +161,7 @@ public class RNCoreML: NSObject {
                             case .double: mtype = "double";
                             case .int32: mtype = "int32";
                             case .float32: mtype = "float32"
+                            case .float16: mtype = "float16";
                             }
                             o = [
                                 "key": k,
@@ -224,6 +226,7 @@ func saveMultiArray(multiArray: MLMultiArray, url: URL) -> Bool {
     case .double: unitSize = 8;
     case .float32: unitSize = 4;
     case .int32: unitSize = 4;
+    case .float16: unitSize = 2;
     }
     for  dim in 1...multiArray.shape.count {
         size = size * (multiArray.shape[dim] as! Int) * (multiArray.strides[dim] as! Int) * unitSize
@@ -237,7 +240,7 @@ func saveMultiArray(multiArray: MLMultiArray, url: URL) -> Bool {
     }
     //MARK: Constants
     //@RNSConstants bundlePath bundleURL
-     override func constantsToExport() -> [AnyHashable : Any]! {
+    func constantsToExport() -> [AnyHashable : Any]! {
         return ["bundlePath": Bundle.main.bundlePath, "bundleURL": Bundle.main.bundleURL.absoluteString]
     }
 }
