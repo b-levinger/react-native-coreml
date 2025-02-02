@@ -186,6 +186,10 @@ public class RNCoreML: NSObject {
                         } else {
                             // Fallback on earlier versions
                         }
+                    case .state:
+                        o = nil
+                    @unknown default:
+                        o = nil
                     }
                     if(ts.count > 0) {
                         out[s] = ["name": s, "type":ts, "value":o];
