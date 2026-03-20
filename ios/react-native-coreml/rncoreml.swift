@@ -62,6 +62,7 @@ public class RNCoreML: NSObject {
         case .float32: t = "float32";
         case .int32: t = "int32";
         case .float16: t = "float16";
+        @unknown default: t = "unknown";
         }
         for n in multiArray.shape {
             t = t.appending(".").appending(n.stringValue)
@@ -162,6 +163,7 @@ public class RNCoreML: NSObject {
                             case .int32: mtype = "int32";
                             case .float32: mtype = "float32"
                             case .float16: mtype = "float16";
+                            @unknown default: mtype = "unknown";
                             }
                             o = [
                                 "key": k,
@@ -231,6 +233,7 @@ func saveMultiArray(multiArray: MLMultiArray, url: URL) -> Bool {
     case .float32: unitSize = 4;
     case .int32: unitSize = 4;
     case .float16: unitSize = 2;
+    @unknown default: return false;
     }
     for  dim in 1...multiArray.shape.count {
         size = size * (multiArray.shape[dim] as! Int) * (multiArray.strides[dim] as! Int) * unitSize
